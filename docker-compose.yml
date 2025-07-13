@@ -11,9 +11,9 @@ services:
   dev:
     build: .
     volumes:
-      - .:/app
       - node_modules:/app/node_modules
       - next:/app/.next
+      - .:/app
     depends_on:
       - postgres
     env_file:
