@@ -1,0 +1,24 @@
+services:
+  postgres:
+    image: postgres:17
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    restart: always
+    environment:
+      - POSTGRES_USER=onlinejudge
+      - POSTGRES_PASSWORD=onlinejudge
+      - POSTGRES_DB=onlinejudge
+    ports:
+      - "5432:5432"
+  dev:
+    build: .
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgresql://onlinejudge:onlinejudge@postgres:5432/onlinejudge
+    ports:
+      - "3000:3000"
