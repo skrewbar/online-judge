@@ -4,10 +4,8 @@ services:
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
     restart: always
-    environment:
-      - POSTGRES_USER=onlinejudge
-      - POSTGRES_PASSWORD=onlinejudge
-      - POSTGRES_DB=onlinejudge
+    env_file:
+      - .env
     ports:
       - "5432:5432"
   dev:
@@ -18,7 +16,7 @@ services:
       - /app/.next
     depends_on:
       - postgres
-    environment:
-      - DATABASE_URL=postgresql://onlinejudge:onlinejudge@postgres:5432/onlinejudge
+    env_file:
+      - .env
     ports:
       - "3000:3000"
