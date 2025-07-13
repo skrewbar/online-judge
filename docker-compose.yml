@@ -8,19 +8,3 @@ services:
       - .env
     ports:
       - "5432:5432"
-  dev:
-    build: .
-    volumes:
-      - node_modules:/app/node_modules
-      - next:/app/.next
-      - .:/app
-    depends_on:
-      - postgres
-    env_file:
-      - .env
-    ports:
-      - "3000:3000"
-
-volumes:
-  node_modules:
-  next:
