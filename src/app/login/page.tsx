@@ -12,10 +12,14 @@ import {
 } from "@/components/ui/card"
 import React, { useActionState } from "react"
 import { LoadingImage } from "@/components/ui/loading-image"
-import { loginAction } from "@/lib/actions"
+import { loginAction, LoginState } from "@/lib/actions"
 
 export default function Page() {
-  const [error, formAction, isPending] = useActionState(loginAction, undefined)
+  const initialState: LoginState = {}
+  const [state, formAction, isPending] = useActionState(
+    loginAction,
+    initialState
+  )
 
   return (
     <main className="flex justify-center items-center min-h-screen">
@@ -27,7 +31,13 @@ export default function Page() {
           <form action={formAction} id="login" className="flex flex-col gap-6">
             <div className="grid gap-2">
               <Label htmlFor="handle">핸들</Label>
-              <Input name="handle" id="handle" type="text" required />
+              <Input
+                name="handle"
+                id="handle"
+                type="text"
+                defaultValue={state.handle}
+                required
+              />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="password">비밀번호</Label>
@@ -37,7 +47,9 @@ export default function Page() {
         </CardContent>
         <CardFooter>
           <div className="w-full flex flex-col gap-3">
-            {error && <p className="text-sm text-red-500">{error}</p>}
+            {state.error && (
+              <p className="text-sm text-red-500">{state.error}</p>
+            )}
             <Button disabled={isPending} form="login" type="submit">
               {isPending ? (
                 <span className="flex items-center justify-center gap-2">

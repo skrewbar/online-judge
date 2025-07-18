@@ -2,8 +2,11 @@ import { prisma } from "@/lib/prisma"
 import { NextRequest, NextResponse } from "next/server"
 import bcrypt from "bcrypt"
 
-async function validateName(handle: string) {
-  return (await prisma.user.findUnique({ where: { handle: handle } })) == null
+async function validateHandle(handle: string) {
+  return (
+    (await prisma.handleHistory.findUnique({ where: { handle: handle } })) ==
+    null
+  )
 }
 async function validateEmail(email: string) {
   return (
@@ -27,7 +30,7 @@ export async function POST(request: NextRequest) {
         },
         { status: 400 }
       )
-    if (!(await validateName(handle)))
+    if (!(await validateHandle(handle)))
       return NextResponse.json(
         {
           error: "이미 해당 핸들을 다른 유저가 사용 중이에요.",
@@ -44,19 +47,28 @@ export async function POST(request: NextRequest) {
 
     const hashedPassword = await bcrypt.hash(password, 11)
 
-    await prisma.user.create({
-      data: {
-        handle: handle,
-        email: email,
-        password: hashedPassword,
-      },
+    await prisma.$transaction(async (tx) => {
+      const user = await tx.user.create({
+        data: {
+          handle,
+          email,
+          password: hashedPassword,
+        },
+      })
+
+      await tx.handleHistory.create({
+        data: {
+          handle,
+          userId: user.id,
+        },
+      })
     })
 
-    return NextResponse.redirect(new URL("/", request.url))
+    return NextResponse.json({ success: true })
   } catch (error) {
     console.error("USER_REGISTER_POST_ERROR", error)
     return NextResponse.json(
-      { error: "내부 서버에 오류가 발생했어요." },
+      { error: "내부 서버에 오류가 발생했어요. 다시 시도해 보시거나 관리자에게 문의해 주세요." },
       { status: 500 }
     )
   }
