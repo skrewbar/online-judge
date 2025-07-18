@@ -19,5 +19,18 @@ model User {
   handle    String @unique
   email     String @unique
   password  String
+
+  createdAt DateTime @default(now())
+
+  handles HandleHistory[]
+}
+
+model HandleHistory {
+  id     String @id @default(cuid())
+  handle String @unique
+
+  userId String
+  user   User @relation(fields: [userId], references: [id])
+
   createdAt DateTime @default(now())
 }
