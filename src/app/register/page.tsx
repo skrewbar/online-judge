@@ -16,7 +16,7 @@ import { useActionState } from "react"
 import { registerAction, RegisterState } from "@/lib/actions"
 
 export default function Page() {
-  const initialState: RegisterState = {}
+  const initialState: RegisterState = { formData: {}, errors: {} }
   const [state, formAction, isPending] = useActionState(
     registerAction,
     initialState
@@ -43,9 +43,11 @@ export default function Page() {
                 name="handle"
                 id="handle"
                 type="text"
-                defaultValue={state.handle}
-                required
+                defaultValue={state.formData.handle}
               />
+              {state.errors.handle && (
+                <p className="text-sm text-red-500">{state.errors.handle}</p>
+              )}
             </div>
             <div className="grid gap-2">
               <Label htmlFor="email">이메일</Label>
@@ -53,34 +55,32 @@ export default function Page() {
                 name="email"
                 id="email"
                 type="email"
-                defaultValue={state.email}
-                required
+                defaultValue={state.formData.email}
               />
+              {state.errors.email && (
+                <p className="text-sm text-red-500">{state.errors.email}</p>
+              )}
             </div>
             <div className="grid gap-2">
               <Label htmlFor="password">비밀번호</Label>
-              <Input
-                name="password"
-                id="password"
-                type="password"
-                required
-              ></Input>
+              <Input name="password" id="password" type="password" />
+              {state.errors.password && (
+                <p className="text-sm text-red-500">{state.errors.password}</p>
+              )}
             </div>
             <div className="grid gap-2">
               <Label htmlFor="pwcheck">비밀번호 확인</Label>
-              <Input
-                name="pwcheck"
-                id="pwcheck"
-                type="password"
-                required
-              ></Input>
+              <Input name="pwcheck" id="pwcheck" type="password" />
+              {state.errors.pwcheck && (
+                <p className="text-sm text-red-500">{state.errors.pwcheck}</p>
+              )}
             </div>
           </form>
         </CardContent>
         <CardFooter>
           <div className="w-full flex flex-col gap-3">
-            {state.error && (
-              <p className="text-sm text-red-500">{state.error}</p>
+            {state.errors.form && (
+              <p className="text-sm text-red-500">{state.errors.form}</p>
             )}
             <Button disabled={isPending} form="register" type="submit">
               {isPending ? (

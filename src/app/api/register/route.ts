@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma"
 import { NextRequest, NextResponse } from "next/server"
 import bcrypt from "bcrypt"
+import { RegisterResponse } from "@/types/api"
 
 async function validateHandle(handle: string) {
   return (
@@ -18,7 +19,9 @@ async function validateEmail(email: string) {
   )
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(
+  request: NextRequest
+): Promise<NextResponse<RegisterResponse>> {
   try {
     const body = await request.json()
     const { handle, email, password } = body
@@ -26,21 +29,30 @@ export async function POST(request: NextRequest) {
     if (!handle || !email || !password)
       return NextResponse.json(
         {
-          error: "필수 항목이 누락되었어요.",
+          success: false,
+          error: { message: "필수 항목이 누락되었어요.", label: "form" },
         },
         { status: 400 }
       )
     if (!(await validateHandle(handle)))
       return NextResponse.json(
         {
-          error: "이미 해당 핸들을 다른 유저가 사용 중이에요.",
+          success: false,
+          error: {
+            message: "다른 유저가 해당 핸들을 사용하고 있어요.",
+            label: "handle",
+          },
         },
         { status: 409 }
       )
     if (!(await validateEmail(email)))
       return NextResponse.json(
         {
-          error: "이미 해당 이메일을 다른 유저가 사용 중이에요.",
+          success: false,
+          error: {
+            message: "다른 유저가 해당 이메일을 사용하고 있어요.",
+            label: "email",
+          },
         },
         { status: 409 }
       )
@@ -68,7 +80,14 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("USER_REGISTER_POST_ERROR", error)
     return NextResponse.json(
-      { error: "내부 서버에 오류가 발생했어요. 다시 시도해 보시거나 관리자에게 문의해 주세요." },
+      {
+        success: false,
+        error: {
+          message:
+            "내부 서버에 오류가 발생했어요. 다시 시도해 보시거나 관리자에게 문의해 주세요.",
+          label: "form",
+        },
+      },
       { status: 500 }
     )
   }

@@ -4,50 +4,70 @@ import { signIn, signOut } from "@/auth"
 import { AuthError } from "next-auth"
 import { redirect } from "next/navigation"
 import { registerSchema, loginSchema } from "./zod"
-import { ZodError } from "zod"
+import z, { ZodError } from "zod"
+import { RegisterResponse } from "@/types/api"
 
 export interface RegisterState {
-  handle?: string
-  email?: string
-  error?: string
+  formData: {
+    handle?: string
+    email?: string
+  }
+  errors: {
+    handle?: string
+    email?: string
+    password?: string
+    pwcheck?: string
+    form?: string
+  }
 }
 export async function registerAction(
   prevState: RegisterState,
   formData: FormData
 ) {
-  const newState: RegisterState = {}
-  try {
-    const { handle, email, password, pwcheck } =
-      await registerSchema.parseAsync(Object.fromEntries(formData.entries()))
-    newState.handle = handle
-    newState.email = email
+  const newState: RegisterState = {
+    formData: {
+      handle: formData.get("handle") as string,
+      email: formData.get("email") as string,
+    },
+    errors: {},
+  }
 
-    if (pwcheck !== password) throw new Error("비밀번호가 일치하지 않아요.")
+  const schemaParseRes = await registerSchema.safeParseAsync(
+    Object.fromEntries(formData.entries())
+  )
 
-    const baseUrl =
-      process.env.BASE_URL?.replace(/\/$/, "") ?? "http://localhost:3000"
+  if (!schemaParseRes.success) {
+    const properties = z.treeifyError(schemaParseRes.error).properties
+    newState.errors.handle = properties?.handle?.errors[0]
+    newState.errors.email = properties?.email?.errors[0]
+    newState.errors.password = properties?.password?.errors[0]
+    newState.errors.pwcheck = properties?.pwcheck?.errors[0]
+    return newState
+  }
 
-    const res = await fetch(baseUrl + "/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        handle,
-        email,
-        password,
-      }),
-    })
+  const { handle, email, password, pwcheck } = schemaParseRes.data
 
-    if (!res.ok) {
-      const data = await res.json()
-      throw new Error(data.error)
-    }
-  } catch (error) {
-    if (error instanceof ZodError) {
-      newState.error = error.message
-    }
-    if (error instanceof Error) {
-      newState.error = error.message
-    }
+  if (pwcheck !== password) {
+    newState.errors.pwcheck = "비밀번호가 일치하지 않아요."
+    return newState
+  }
+
+  const baseUrl =
+    process.env.BASE_URL?.replace(/\/$/, "") ?? "http://localhost:3000"
+
+  const res = await fetch(baseUrl + "/api/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      handle,
+      email,
+      password,
+    }),
+  })
+
+  if (!res.ok) {
+    const data: RegisterResponse = await res.json()
+    newState.errors[data.error!.label] = data.error!.message
     return newState
   }
 
