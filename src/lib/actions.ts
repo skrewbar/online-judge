@@ -37,8 +37,7 @@ export async function registerAction(
       }),
     })
 
-    if (res.ok) redirect("/login")
-    else {
+    if (!res.ok) {
       const data = await res.json()
       throw new Error(data.error)
     }
@@ -49,9 +48,10 @@ export async function registerAction(
     if (error instanceof Error) {
       newState.error = error.message
     }
+    return newState
   }
 
-  return newState
+  redirect("/login")
 }
 
 export interface LoginState {
