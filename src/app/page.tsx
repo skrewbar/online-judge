@@ -4,5 +4,5 @@ export default async function Home() {
       <h1 className="text-3xl">안녕하세요</h1>
       <p>안녕하다는뜻</p>
     </main>
-  );
+  )
 }

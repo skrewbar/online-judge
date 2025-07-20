@@ -1,10 +1,10 @@
-import "./globals.css";
-import NavigationBar from "./NavigationBar";
+import "./globals.css"
+import NavigationBar from "./NavigationBar"
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="en">
@@ -13,5 +13,5 @@ export default function RootLayout({
         <div className="flex-1">{children}</div>
       </body>
     </html>
-  );
+  )
 }

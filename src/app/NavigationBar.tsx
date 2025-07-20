@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "next/link"
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -8,13 +8,13 @@ import {
   NavigationMenuTrigger,
   NavigationMenuViewport,
   navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
-import { auth } from "@/auth";
-import { Button } from "@/components/ui/button";
-import { logoutAction } from "@/lib/actions";
+} from "@/components/ui/navigation-menu"
+import { auth } from "@/auth"
+import { Button } from "@/components/ui/button"
+import { logoutAction } from "@/lib/actions"
 
 export default async function NavigationBar() {
-  const session = await auth();
+  const session = await auth()
 
   return (
     <NavigationMenu viewport={false} className="min-w-full h-10">
@@ -54,5 +54,5 @@ export default async function NavigationBar() {
         )}
       </NavigationMenuList>
     </NavigationMenu>
-  );
+  )
 }

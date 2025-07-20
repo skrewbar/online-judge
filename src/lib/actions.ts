@@ -74,6 +74,7 @@ export async function registerAction(
   redirect("/login")
 }
 
+// TODO: 로그인도 회원가입처럼 field마다 error띄우도록 만들기
 export interface LoginState {
   handle?: string
   error?: string
