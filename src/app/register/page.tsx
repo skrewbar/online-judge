@@ -23,7 +23,7 @@ export default function Page() {
   )
 
   return (
-    <main className="flex justify-center items-center min-h-screen">
+    <main className="flex justify-center items-center h-full">
       <Card className="w-full max-w-lg">
         <CardHeader>
           <CardTitle className="text-lg">회원가입</CardTitle>
