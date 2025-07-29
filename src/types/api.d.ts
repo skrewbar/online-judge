@@ -1,7 +1,8 @@
+type RegisterField = "handle" | "email" | "password" | "pwcheck" | "form"
 export interface RegisterResponse {
   success: boolean
   error?: {
     message: string
-    label: "handle" | "email" | "password" | "pwcheck" | "form"
+    field: RegisterField
   }
 }

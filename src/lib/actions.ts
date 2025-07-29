@@ -62,12 +62,14 @@ export async function registerAction(
       handle,
       email,
       password,
+      pwcheck,
     }),
   })
 
   if (!res.ok) {
     const data: RegisterResponse = await res.json()
-    newState.errors[data.error!.label] = data.error!.message
+    console.log(formData.get("pwcheck"))
+    newState.errors[data.error!.field] = data.error!.message
     return newState
   }
 
@@ -82,7 +84,7 @@ export async function loginAction(prevState: LoginState, formData: FormData) {
   const newState: LoginState = {}
 
   try {
-    const { handle, password } = await loginSchema.parseAsync(
+    const { handle, password } = loginSchema.parse(
       Object.fromEntries(formData.entries())
     )
     newState.handle = handle

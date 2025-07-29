@@ -10,7 +10,7 @@ export const authConfig = {
     Credentials({
       async authorize(credentials) {
         try {
-          const { handle, password } = await loginSchema.parseAsync(credentials)
+          const { handle, password } = loginSchema.parse(credentials)
 
           const user = await prisma.user.findUnique({
             where: { handle },
