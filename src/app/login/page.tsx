@@ -15,6 +15,8 @@ import { LoadingImage } from "@/components/ui/loading-image"
 import { loginAction, LoginState } from "@/lib/actions"
 
 export default function Page() {
+  // TODO: 이미 로그인 되어있는 경우 홈으로 리다이렉트
+
   const initialState: LoginState = {}
   const [state, formAction, isPending] = useActionState(
     loginAction,

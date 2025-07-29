@@ -26,6 +26,7 @@ export async function registerAction(
   prevState: RegisterState,
   formData: FormData
 ) {
+  // TODO: api 없이 server action 내에서 전부 처리하기
   const newState: RegisterState = {
     formData: {
       handle: formData.get("handle") as string,
