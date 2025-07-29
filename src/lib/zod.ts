@@ -25,3 +25,7 @@ export const loginSchema = object({
   handle: string().min(1, "핸들을 입력해 주세요."),
   password: string().min(1, "비밀번호를 입력해 주세요."),
 })
+
+export const createProblemSchema = object({
+  title: string().min(1, "문제의 제목을 입력해 주세요."),
+})

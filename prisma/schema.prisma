@@ -14,23 +14,157 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        String @id @default(cuid())
-  handle    String @unique
-  email     String @unique
-  password  String
-
-  createdAt DateTime @default(now())
-
-  handles HandleHistory[]
-}
-
 model HandleHistory {
   id     String @id @default(cuid())
   handle String @unique
 
   userId String
-  user   User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
+}
+
+model User {
+  id        String   @id @default(cuid())
+  handle    String   @unique
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+
+  handles HandleHistory[]
+
+  solvedProblems Problem[]    @relation("SolvedProblems")
+  submissions    Submission[]
+
+  createdProblems Problem[] @relation("CreatedProblems")
+
+  problemAccesses ProblemAccess[]
+}
+
+model Problem {
+  id Int @id @default(autoincrement())
+
+  // general info
+  isPublic       Boolean @default(false)
+  timeLimit      Int     @default(1000) // milliseconds
+  memoryLimit    Int     @default(256) // megabytes
+  difficulty     Int     @default(0) // follows solved.ac difficulty system
+  tags           Tag[]   @relation("ProblemTags")
+  isSpecialJudge Boolean @default(false)
+  isInteractive  Boolean @default(false)
+  isSubtask      Boolean @default(false)
+
+  authorId  String
+  author    User     @relation("CreatedProblems", fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+
+  // statements
+  title        String
+  legend       String
+  inputFormat  String
+  outputFormat String
+  notes        String?
+
+  solvedUsers User[] @relation("SolvedProblems")
+
+  submissions Submission[]
+
+  testCases  TestCase[]
+  subTasks   Subtask[]
+  checker    String? // sources must be C++ codes
+  interactor String?
+
+  accesses ProblemAccess[]
+}
+
+model Subtask {
+  subtaskNumber Int
+  problemId     Int
+  problem       Problem @relation(fields: [problemId], references: [id])
+
+  limitation String // description
+
+  score     Int
+  testCases TestCase[]
+
+  @@id([subtaskNumber, problemId])
+}
+
+model TestCase {
+  caseNumber Int
+  problemId  Int
+  problem    Problem @relation(fields: [problemId], references: [id])
+
+  isSample Boolean @default(false)
+  isJudged Boolean @default(true)
+
+  input  String
+  output String
+
+  subtaskNumber Int
+  subtask       Subtask @relation(fields: [subtaskNumber, problemId], references: [subtaskNumber, problemId])
+
+  @@id([caseNumber, problemId])
+}
+
+model Tag {
+  id   String @id @default(cuid())
+  name String
+
+  problems Problem[] @relation("ProblemTags")
+}
+
+model Submission {
+  id Int @id @default(autoincrement())
+
+  code     String
+  language Language
+
+  execTime    Int?
+  memoryUsage Int?
+  score       Int? // used in subtask problem
+  message     String? // e.g. "Output does not match at line 3", "Segmentation fault"
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  problemId Int
+  problem   Problem @relation(fields: [problemId], references: [id])
+
+  status SubmissionStatus
+}
+
+enum Language {
+  CPP20
+  PYTHON3
+  PYPY3
+}
+
+enum SubmissionStatus {
+  PENDING
+  PREPARING
+  JUDGING
+  ACCEPTED
+  WRONG_ANSWER
+  TIME_LIMIT_EXCEEDED
+  MEMORY_LIMIT_EXCEEDED
+  RUNTIME_ERROR
+  COMPILE_ERROR
+}
+
+enum ProblemAccessRole {
+  OWNER
+  EDITOR
+  VIEWER
+}
+
+model ProblemAccess {
+  userId    String
+  problemId Int
+  role      ProblemAccessRole
+
+  user    User    @relation(fields: [userId], references: [id])
+  problem Problem @relation(fields: [problemId], references: [id])
+
+  @@id([userId, problemId])
 }
