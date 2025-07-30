@@ -3,81 +3,10 @@
 import { signIn, signOut } from "@/auth"
 import { AuthError } from "next-auth"
 import { redirect } from "next/navigation"
-import { registerSchema, loginSchema, createProblemSchema } from "./zod"
-import z, { ZodError } from "zod"
-import { RegisterResponse } from "@/types/api"
+import { loginSchema, createProblemSchema } from "./zod"
+import { ZodError } from "zod"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/auth"
-
-export interface RegisterState {
-  formData: {
-    handle?: string
-    email?: string
-  }
-  errors: {
-    handle?: string
-    email?: string
-    password?: string
-    pwcheck?: string
-    form?: string
-  }
-}
-export async function registerAction(
-  prevState: RegisterState,
-  formData: FormData
-) {
-  // TODO: api 없이 server action 내에서 전부 처리하기
-  const newState: RegisterState = {
-    formData: {
-      handle: formData.get("handle") as string,
-      email: formData.get("email") as string,
-    },
-    errors: {},
-  }
-
-  const schemaParseRes = await registerSchema.safeParseAsync(
-    Object.fromEntries(formData.entries())
-  )
-
-  if (!schemaParseRes.success) {
-    const properties = z.treeifyError(schemaParseRes.error).properties
-    newState.errors.handle = properties?.handle?.errors[0]
-    newState.errors.email = properties?.email?.errors[0]
-    newState.errors.password = properties?.password?.errors[0]
-    newState.errors.pwcheck = properties?.pwcheck?.errors[0]
-    return newState
-  }
-
-  const { handle, email, password, pwcheck } = schemaParseRes.data
-
-  if (pwcheck !== password) {
-    newState.errors.pwcheck = "비밀번호가 일치하지 않아요."
-    return newState
-  }
-
-  const baseUrl =
-    process.env.BASE_URL?.replace(/\/$/, "") ?? "http://localhost:3000"
-
-  const res = await fetch(baseUrl + "/api/register", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      handle,
-      email,
-      password,
-      pwcheck,
-    }),
-  })
-
-  if (!res.ok) {
-    const data: RegisterResponse = await res.json()
-    console.log(formData.get("pwcheck"))
-    newState.errors[data.error!.field] = data.error!.message
-    return newState
-  }
-
-  redirect("/login")
-}
 
 export interface LoginState {
   handle?: string
