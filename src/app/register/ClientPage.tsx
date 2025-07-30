@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/card"
 import { LoadingImage } from "@/components/ui/loading-image"
 import { useActionState } from "react"
-import { RegisterState, registerAction } from "./action"
+import { RegisterState, registerAction } from "./actions"
 
 export default function ClientPage() {
   const initialState: RegisterState = { formData: {}, errors: {} }
