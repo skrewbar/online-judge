@@ -11,10 +11,10 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { useActionState } from "react"
-import { createProblemAction, CreateProblemState } from "@/lib/actions"
+import { createProblemAction, CreateProblemState } from "./actions"
 import { LoadingImage } from "@/components/ui/loading-image"
 
-export default function FormCard() {
+export default function ClientPage() {
   const initialState: CreateProblemState = { title: "" }
   const [state, formAction, isPending] = useActionState(
     createProblemAction,
