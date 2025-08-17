@@ -2,7 +2,7 @@ import "./globals.css"
 import NavigationBar from "./NavigationBar"
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode
 }>) {
