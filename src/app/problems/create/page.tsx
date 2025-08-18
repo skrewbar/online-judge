@@ -4,7 +4,7 @@ import ClientPage from "./ClientPage"
 
 export default async function Page() {
   const session = await auth()
-  if (!session?.user) redirect("/login")
+  if (!session?.user) redirect("/login") // TODO: 404로 redirect
 
   return <ClientPage />
 }
