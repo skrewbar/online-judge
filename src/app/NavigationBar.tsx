@@ -24,8 +24,8 @@ export default async function NavigationBar() {
         {session?.user ? (
           <NavigationMenuItem asChild>
             <form action={logoutAction}>
-              <NavigationMenuLink asChild>
-                <button>로그아웃</button>
+              <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                <button className="cursor-pointer">로그아웃</button>
               </NavigationMenuLink>
             </form>
           </NavigationMenuItem>
