@@ -8,7 +8,7 @@ export async function getPaginatedProblems(page: number, pageSize: number) {
     skip: (page - 1) * pageSize,
     take: pageSize,
     orderBy: {
-      createdAt: "desc",
+      id: "asc",
     },
     select: {
       id: true,
