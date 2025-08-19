@@ -154,7 +154,6 @@ enum SubmissionStatus {
 }
 
 enum ProblemAccessRole {
-  OWNER
   EDITOR
   VIEWER
 }
