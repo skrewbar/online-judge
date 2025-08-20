@@ -83,7 +83,7 @@ model Subtask {
   problemId     Int
   problem       Problem @relation(fields: [problemId], references: [id])
 
-  limitation String // description
+  limit String // description
 
   score     Int
   testCases TestCase[]
