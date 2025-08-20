@@ -53,7 +53,7 @@ model Problem {
   tags           Tag[]   @relation("ProblemTags")
   isSpecialJudge Boolean @default(false)
   isInteractive  Boolean @default(false)
-  isSubtask      Boolean @default(false)
+  hasSubtask      Boolean @default(false)
 
   authorId  String
   author    User     @relation("CreatedProblems", fields: [authorId], references: [id])
