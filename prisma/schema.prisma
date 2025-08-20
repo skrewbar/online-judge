@@ -110,7 +110,7 @@ model TestCase {
 
 model Tag {
   id   String @id @default(cuid())
-  name String
+  name String @unique
 
   problems Problem[] @relation("ProblemTags")
 }
