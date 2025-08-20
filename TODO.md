@@ -1,2 +1,11 @@
-not-found 페이지(404) 만들기
-문제 수정하는 페이지 만들기
+# Online Judge Todos
+
+### Todo
+
+- [ ] Work on internationalization
+
+### In Progress
+
+- [ ] Work on problem editing pages
+
+### Done
