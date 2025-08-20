@@ -1,6 +1,6 @@
 "use server"
 
-import { registerSchema } from "@/lib/zod"
+import { registerSchema } from "./schemas"
 import z from "zod"
 import { redirect } from "next/navigation"
 import bcrypt from "bcrypt"

@@ -1,7 +1,7 @@
 "use server"
 
 import { redirect } from "next/navigation"
-import { createProblemSchema } from "@/lib/zod"
+import { createProblemSchema } from "./schemas"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 
