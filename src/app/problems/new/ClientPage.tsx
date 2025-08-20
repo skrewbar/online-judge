@@ -15,7 +15,7 @@ import { createProblemAction, CreateProblemState } from "./actions"
 import { LoadingImage } from "@/components/ui/loading-image"
 
 export default function ClientPage() {
-  const initialState: CreateProblemState = { title: "" }
+  const initialState: CreateProblemState = { data: { title: "" } }
   const [state, formAction, isPending] = useActionState(
     createProblemAction,
     initialState

@@ -4,20 +4,24 @@ import { redirect } from "next/navigation"
 import { createProblemSchema } from "./schemas"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
+import z from "zod"
 
 export interface CreateProblemState {
-  title: string
+  data: z.infer<typeof createProblemSchema>
   error?: string
 }
+
 export async function createProblemAction(
   prevState: CreateProblemState,
   formData: FormData
 ): Promise<CreateProblemState> {
   const newState: CreateProblemState = {
-    title: formData.get("title") as string,
+    data: {
+      title: formData.get("title") as string,
+    },
   }
 
-  const parseRes = createProblemSchema.safeParse(newState)
+  const parseRes = createProblemSchema.safeParse(newState.data)
   if (!parseRes.success) {
     newState.error = parseRes.error.issues[0].message
     return newState
