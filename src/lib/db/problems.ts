@@ -17,7 +17,7 @@ export async function getPaginatedProblems(page: number, pageSize: number) {
         title: true,
         isSpecialJudge: true,
         isInteractive: true,
-        isSubtask: true,
+        hasSubtask: true,
         _count: {
           select: {
             solvedUsers: true,
