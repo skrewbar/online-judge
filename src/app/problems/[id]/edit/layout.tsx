@@ -3,7 +3,6 @@ import React from "react"
 import { notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { ProblemAccessRole } from "@/generated/prisma"
-import ProblemProvider from "./ProblemProvider"
 
 type LayoutProps = Readonly<{
   children: React.ReactNode
@@ -38,7 +37,7 @@ export default async function Layout({ children, params }: LayoutProps) {
   return (
     <>
       <h1>{problem.title}</h1>
-      <ProblemProvider problem={problem}>{children}</ProblemProvider>
+      {children}
     </>
   )
 }

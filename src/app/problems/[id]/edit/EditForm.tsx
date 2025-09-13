@@ -1,7 +1,7 @@
 "use client"
 
 import { useActionState, useState } from "react"
-import { useProblem } from "./ProblemContext"
+import { useProblem } from "../ProblemContext"
 
 import {
   Card,
