@@ -47,13 +47,13 @@ model Problem {
 
   // general info
   isPublic       Boolean @default(false)
+  isSpecialJudge Boolean @default(false)
+  isInteractive  Boolean @default(false)
+  hasSubtask     Boolean @default(false)
   timeLimit      Int     @default(1000) // milliseconds
   memoryLimit    Int     @default(256) // megabytes
   difficulty     Int     @default(0) // follows solved.ac difficulty system
   tags           Tag[]   @relation("ProblemTags")
-  isSpecialJudge Boolean @default(false)
-  isInteractive  Boolean @default(false)
-  hasSubtask      Boolean @default(false)
 
   authorId  String
   author    User     @relation("CreatedProblems", fields: [authorId], references: [id])
