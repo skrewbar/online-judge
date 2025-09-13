@@ -10,11 +10,13 @@ export const generalInfoSchema = object({
     .array()
     .min(1, "아무런 태그도 선택되지 않았어요.")
     .refine(
-      (tags: string[]) => new Set(tags).size === tags.length,
+      (tags) => new Set(tags).size === tags.length,
       "중복된 태그가 있어요."
     )
-    .refine(async (tags: string[]) => {
-      const count = await prisma.tag.count({ where: { name: { in: tags } } })
+    .refine(async (tags) => {
+      const count = await prisma.tag.count({
+        where: { name: { in: tags } },
+      })
 
       return count === tags.length
     }, "존재하지 않는 태그가 포함되어 있어요."),

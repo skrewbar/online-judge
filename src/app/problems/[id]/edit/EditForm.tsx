@@ -5,10 +5,8 @@ import { useProblem } from "./ProblemContext"
 
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -29,6 +27,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command"
+import { LoadingImage } from "@/components/ui/loading-image"
 import { Plus, X } from "lucide-react"
 
 import type { GeneralInfoState } from "./actions"
@@ -86,7 +85,7 @@ export default function EditForm({ allTags }: EditFormProps) {
           >
             <div className="flex items-center gap-3">
               <Checkbox
-                name="id-public"
+                name="isPublic"
                 id="is-public"
                 defaultChecked={state.isPublic}
               />
@@ -94,32 +93,32 @@ export default function EditForm({ allTags }: EditFormProps) {
             </div>
             <div className="flex items-center gap-3">
               <Checkbox
-                name="id-public"
-                id="is-public"
+                name="isSpecialJudge"
+                id="is-special-judge"
                 defaultChecked={state.isSpecialJudge}
               />
-              <Label htmlFor="is-public">스페셜 저지</Label>
+              <Label htmlFor="is-special-judge">스페셜 저지</Label>
             </div>
             <div className="flex items-center gap-3">
               <Checkbox
-                name="id-public"
-                id="is-public"
+                name="isInteractive"
+                id="is-interactive"
                 defaultChecked={state.isInteractive}
               />
-              <Label htmlFor="is-public">인터랙티브</Label>
+              <Label htmlFor="is-interactive">인터랙티브</Label>
             </div>
             <div className="flex items-center gap-3">
               <Checkbox
-                name="id-public"
-                id="is-public"
+                name="hasSubtask"
+                id="has-subtask"
                 defaultChecked={state.hasSubtask}
               />
-              <Label htmlFor="is-public">서브태스크</Label>
+              <Label htmlFor="has-subtask">서브태스크</Label>
             </div>
             <div className="flex flex-col gap-3">
               <Label htmlFor="time-limit">시간 제한 (ms)</Label>
               <Input
-                name="time-limit"
+                name="timeLimit"
                 id="time-limit"
                 type="number"
                 defaultValue={state.timeLimit}
@@ -128,7 +127,7 @@ export default function EditForm({ allTags }: EditFormProps) {
             <div className="flex flex-col gap-3">
               <Label htmlFor="memory-limit">메모리 제한 (MiB)</Label>
               <Input
-                name="memory-limit"
+                name="memoryLimit"
                 id="memory-limit"
                 type="number"
                 defaultValue={state.memoryLimit}
@@ -178,7 +177,6 @@ export default function EditForm({ allTags }: EditFormProps) {
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent>
-                    {/* TODO: DB에 있는 태그들 모조리 가져와서 보여주기 */}
                     <Command>
                       <CommandInput placeholder="태그 검색" />
                       <CommandList>
@@ -208,6 +206,12 @@ export default function EditForm({ allTags }: EditFormProps) {
                 ))}
               </div>
             </div>
+            {state.error && <p className="text-red-500">{state.error}</p>}
+            {state.success && <p className="text-green-600">저장 성공</p>}
+
+            <Button disabled={isPending}>
+              저장 {isPending && <LoadingImage />}
+            </Button>
           </form>
         </CardContent>
       </Card>
