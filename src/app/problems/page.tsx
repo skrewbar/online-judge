@@ -18,6 +18,9 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
+import { getDiffImageSrc } from "@/utils/difficulty"
+
+import Image from "next/image"
 
 const disabledStyle = "pointer-events-none opacity-50"
 interface PageProps {
@@ -59,7 +62,14 @@ export default async function Page({ searchParams }: PageProps) {
             {problems.map((problem) => (
               <TableRow key={problem.id}>
                 <TableCell>{problem.id}</TableCell>
-                <TableCell>{problem.difficulty}</TableCell>
+                <TableCell>
+                  <Image
+                    alt={`${problem.difficulty}`}
+                    src={getDiffImageSrc(problem.difficulty)}
+                    width={15}
+                    height={30}
+                  ></Image>
+                </TableCell>
                 <TableCell>{problem.title}</TableCell>
               </TableRow>
             ))}

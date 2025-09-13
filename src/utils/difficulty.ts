@@ -22,3 +22,7 @@ export function getColorOfDiff(diff: number) {
   if (diff <= 25) return "#00b4fc"
   else return "#ff0062"
 }
+
+export function getDiffImageSrc(diff: number) {
+  return `https://static.solved.ac/tier_small/${diff}.svg`
+}
