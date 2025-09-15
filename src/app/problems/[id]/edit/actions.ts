@@ -3,13 +3,12 @@
 import { prisma } from "@/lib/prisma"
 
 import { generalInfoSchema } from "./schemas"
-import z from "zod"
+import { revalidatePath } from "next/cache"
 
 export type GeneralInfoState = {
-  id: number
   error?: string
   success?: boolean
-} & z.infer<typeof generalInfoSchema>
+}
 
 export async function editAction(
   prevState: GeneralInfoState,
@@ -26,12 +25,16 @@ export async function editAction(
     hasSubtask: !!formData.get("hasSubtask"),
   })
 
-  if (!parseRes.success) {
+  const id = parseInt(formData.get("id") as string)
+
+  if (!parseRes.success)
     return {
-      ...prevState,
       error: `${parseRes.error.issues[0].path}: ${parseRes.error.issues[0].message}`,
     }
-  }
+  if (!(await prisma.problem.findUnique({ where: { id } })))
+    return {
+      error: "페이지가 손상되었습니다. 새로고침 후 다시 시도해 주세요.",
+    }
 
   const { tags: tagNames, ...dataWithoutTags } = structuredClone(parseRes.data)
 
@@ -39,7 +42,7 @@ export async function editAction(
 
   if (parseRes.success) {
     await prisma.problem.update({
-      where: { id: prevState.id },
+      where: { id },
       data: {
         ...dataWithoutTags,
         tags: {
@@ -49,9 +52,9 @@ export async function editAction(
     })
   }
 
+  revalidatePath(`/problems/${id}/edit`)
+
   return {
-    id: prevState.id,
     success: true,
-    ...parseRes.data,
   }
 }

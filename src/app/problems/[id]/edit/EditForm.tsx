@@ -1,6 +1,6 @@
 "use client"
 
-import { useActionState, useState } from "react"
+import { useActionState, useEffect, useState } from "react"
 import { useProblem } from "../ProblemContext"
 
 import {
@@ -30,12 +30,14 @@ import {
 import { LoadingImage } from "@/components/ui/loading-image"
 import { Plus, X } from "lucide-react"
 
-import type { GeneralInfoState } from "./actions"
 import { editAction } from "./actions"
 import Image from "next/image"
 
 import { intToDiff, getColorOfDiff } from "@/utils/difficulty"
 import { Button } from "@/components/ui/button"
+
+import { generalInfoSchema } from "./schemas"
+import z from "zod"
 
 interface EditFormProps {
   allTags: string[]
@@ -44,28 +46,29 @@ interface EditFormProps {
 export default function EditForm({ allTags }: EditFormProps) {
   const problem = useProblem()
 
-  const initialState: GeneralInfoState = {
-    id: problem.id,
-    isPublic: problem.isPublic,
-    timeLimit: problem.timeLimit,
-    memoryLimit: problem.memoryLimit,
-    difficulty: problem.difficulty,
+  const [state, formAction, isPending] = useActionState(editAction, {})
+
+  const [form, setForm] = useState({
+    ...problem,
     tags: problem.tags.map((tag) => tag.name),
-    isSpecialJudge: problem.isSpecialJudge,
-    isInteractive: problem.isInteractive,
-    hasSubtask: problem.hasSubtask,
+  })
+  type GeneralInfoForm = z.infer<typeof generalInfoSchema>
+  const updateForm = <K extends keyof GeneralInfoForm>(
+    key: K,
+    value: GeneralInfoForm[K]
+  ) => {
+    setForm((prev) => ({ ...prev, [key]: value }))
   }
 
-  const [state, formAction, isPending] = useActionState(
-    editAction,
-    initialState
-  )
+  useEffect(() => {
+    setForm({
+      ...problem,
+      tags: problem.tags.map((tag) => tag.name),
+    })
+  }, [problem])
 
-  const [difficulty, setDifficulty] = useState(state.difficulty)
-
-  const [tags, setTags] = useState(state.tags)
   const addTag = (tag: string) => {
-    setTags([...tags, tag].sort())
+    updateForm("tags", [...form.tags, tag].sort())
   }
 
   return (
@@ -83,11 +86,13 @@ export default function EditForm({ allTags }: EditFormProps) {
             id="general"
             className="flex flex-col gap-6"
           >
+            <input hidden name="id" defaultValue={`${problem.id}`}></input>
             <div className="flex items-center gap-3">
               <Checkbox
                 name="isPublic"
                 id="is-public"
-                defaultChecked={state.isPublic}
+                checked={form.isPublic}
+                onCheckedChange={(v) => updateForm("isPublic", !!v)}
               />
               <Label htmlFor="is-public">공개</Label>
             </div>
@@ -95,7 +100,8 @@ export default function EditForm({ allTags }: EditFormProps) {
               <Checkbox
                 name="isSpecialJudge"
                 id="is-special-judge"
-                defaultChecked={state.isSpecialJudge}
+                checked={form.isSpecialJudge}
+                onCheckedChange={(v) => updateForm("isSpecialJudge", !!v)}
               />
               <Label htmlFor="is-special-judge">스페셜 저지</Label>
             </div>
@@ -103,7 +109,8 @@ export default function EditForm({ allTags }: EditFormProps) {
               <Checkbox
                 name="isInteractive"
                 id="is-interactive"
-                defaultChecked={state.isInteractive}
+                checked={form.isInteractive}
+                onCheckedChange={(v) => updateForm("isInteractive", !!v)}
               />
               <Label htmlFor="is-interactive">인터랙티브</Label>
             </div>
@@ -111,7 +118,8 @@ export default function EditForm({ allTags }: EditFormProps) {
               <Checkbox
                 name="hasSubtask"
                 id="has-subtask"
-                defaultChecked={state.hasSubtask}
+                checked={form.hasSubtask}
+                onCheckedChange={(v) => updateForm("hasSubtask", !!v)}
               />
               <Label htmlFor="has-subtask">서브태스크</Label>
             </div>
@@ -121,7 +129,10 @@ export default function EditForm({ allTags }: EditFormProps) {
                 name="timeLimit"
                 id="time-limit"
                 type="number"
-                defaultValue={state.timeLimit}
+                value={form.timeLimit}
+                onChange={(e) =>
+                  updateForm("timeLimit", parseInt(e.target.value))
+                }
               />
             </div>
             <div className="flex flex-col gap-3">
@@ -130,7 +141,10 @@ export default function EditForm({ allTags }: EditFormProps) {
                 name="memoryLimit"
                 id="memory-limit"
                 type="number"
-                defaultValue={state.memoryLimit}
+                value={form.memoryLimit}
+                onChange={(e) =>
+                  updateForm("memoryLimit", parseInt(e.target.value))
+                }
               ></Input>
             </div>
             <div className="flex flex-col gap-3">
@@ -139,20 +153,18 @@ export default function EditForm({ allTags }: EditFormProps) {
                 <Image
                   width={50}
                   height={64}
-                  alt={`${difficulty}`}
-                  src={`https://static.solved.ac/tier_small/${difficulty}.svg`}
+                  alt={`${form.difficulty}`}
+                  src={`https://static.solved.ac/tier_small/${form.difficulty}.svg`}
                 ></Image>
-                <p style={{ color: getColorOfDiff(difficulty) }}>
-                  {intToDiff(difficulty)}
+                <p style={{ color: getColorOfDiff(form.difficulty) }}>
+                  {intToDiff(form.difficulty)}
                 </p>
                 <Slider
                   id="difficulty"
                   name="difficulty"
                   max={30}
-                  defaultValue={[difficulty]}
-                  onValueChange={(value) => {
-                    setDifficulty(value[0])
-                  }}
+                  value={[form.difficulty]}
+                  onValueChange={(value) => updateForm("difficulty", value[0])}
                 />
               </div>
             </div>
@@ -160,10 +172,15 @@ export default function EditForm({ allTags }: EditFormProps) {
               <Label htmlFor="tags">태그</Label>
 
               <div className="flex flex-wrap gap-2">
-                {tags.map((tag, idx) => (
+                {form.tags.map((tag, idx) => (
                   <Button
                     key={tag}
-                    onClick={() => setTags(tags.filter((_, i) => i != idx))}
+                    onClick={() =>
+                      updateForm(
+                        "tags",
+                        form.tags.filter((_, i) => i != idx)
+                      )
+                    }
                     variant="outline"
                   >
                     {tag} <X />
@@ -184,7 +201,7 @@ export default function EditForm({ allTags }: EditFormProps) {
                         <CommandGroup>
                           {allTags.map(
                             (tag) =>
-                              !tags.includes(tag) && (
+                              !form.tags.includes(tag) && (
                                 <CommandItem
                                   key={tag}
                                   value={tag}
@@ -201,7 +218,7 @@ export default function EditForm({ allTags }: EditFormProps) {
                 </Popover>
 
                 {/* hidden input for server actions */}
-                {tags.map((tag, idx) => (
+                {form.tags.map((tag, idx) => (
                   <input key={idx} type="hidden" name="tags" value={tag} />
                 ))}
               </div>
