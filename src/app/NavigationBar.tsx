@@ -21,6 +21,11 @@ export default async function NavigationBar() {
             <Link href="/">홈</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
+        <NavigationMenuItem asChild>
+          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+            <Link href="/problems">문제</Link>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
         {session?.user ? (
           <NavigationMenuItem asChild>
             <form action={logoutAction}>
