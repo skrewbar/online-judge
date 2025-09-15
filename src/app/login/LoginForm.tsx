@@ -14,7 +14,7 @@ import React, { useActionState } from "react"
 import { LoadingImage } from "@/components/ui/loading-image"
 import { loginAction, LoginState } from "./actions"
 
-export default function Form({ redirect }: { redirect: string }) {
+export default function LoginForm({ redirect }: { redirect: string }) {
   const initialState: LoginState = { redirect }
   const [state, formAction, isPending] = useActionState(
     loginAction,

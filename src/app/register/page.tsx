@@ -1,10 +1,10 @@
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
-import ClientPage from "./ClientPage"
+import RegisterForm from "./RegisterForm"
 
 export default async function Page() {
   const session = await auth()
   if (session?.user) redirect("/")
 
-  return <ClientPage />
+  return <RegisterForm />
 }

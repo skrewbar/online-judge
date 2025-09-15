@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation"
-import Form from "./Form"
+import LoginForm from "./LoginForm"
 import { auth } from "@/auth"
 
 interface PageProps {
@@ -14,5 +14,5 @@ export default async function Page({ searchParams }: PageProps) {
 
   if (session?.user) redirect(redirectURL)
 
-  return <Form redirect={redirectURL}></Form>
+  return <LoginForm redirect={redirectURL}></LoginForm>
 }

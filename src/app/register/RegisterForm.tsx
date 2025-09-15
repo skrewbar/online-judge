@@ -15,7 +15,7 @@ import { LoadingImage } from "@/components/ui/loading-image"
 import { useActionState } from "react"
 import { RegisterState, registerAction } from "./actions"
 
-export default function ClientPage() {
+export default function RegisterForm() {
   const initialState: RegisterState = { formData: {}, errors: {} }
   const [state, formAction, isPending] = useActionState(
     registerAction,
