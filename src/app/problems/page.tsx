@@ -21,6 +21,7 @@ import {
 import { getDiffImageSrc } from "@/utils/difficulty"
 
 import Image from "next/image"
+import Link from "next/link"
 
 const disabledStyle = "pointer-events-none opacity-50"
 interface PageProps {
@@ -53,24 +54,30 @@ export default async function Page({ searchParams }: PageProps) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>번호</TableHead>
-              <TableHead>난이도</TableHead>
+              <TableHead className="w-20 text-center">번호</TableHead>
+              <TableHead className="w-20 text-center">난이도</TableHead>
               <TableHead>제목</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {problems.map((problem) => (
               <TableRow key={problem.id}>
-                <TableCell>{problem.id}</TableCell>
-                <TableCell>
-                  <Image
-                    alt={`${problem.difficulty}`}
-                    src={getDiffImageSrc(problem.difficulty)}
-                    width={15}
-                    height={30}
-                  ></Image>
+                <TableCell className="flex justify-center">
+                  {problem.id}
                 </TableCell>
-                <TableCell>{problem.title}</TableCell>
+                <TableCell>
+                  <div className="flex justify-center">
+                    <Image
+                      alt={`${problem.difficulty}`}
+                      src={getDiffImageSrc(problem.difficulty)}
+                      width={15}
+                      height={30}
+                    />
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <Link className="text-blue-700 hover:underline" href={`/problems/${problem.id}`}>{problem.title}</Link>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
