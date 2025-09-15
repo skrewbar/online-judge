@@ -69,7 +69,7 @@ export default function EditForm({ allTags }: EditFormProps) {
   }
 
   return (
-    <main className="flex justify-center items-center h-5/6">
+    <main className="flex justify-center items-center w-full">
       <Card className="w-full max-w-lg">
         <CardHeader>
           <CardTitle>일반</CardTitle>

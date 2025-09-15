@@ -35,9 +35,9 @@ export default async function Layout({ children, params }: LayoutProps) {
     notFound()
 
   return (
-    <>
-      <h1>{problem.title}</h1>
+    <div className="w-full flex flex-col justify-center items-center gap-7 mt-3">
+      <h1 className="text-3xl">{problem.title}</h1>
       {children}
-    </>
+    </div>
   )
 }
