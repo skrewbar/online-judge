@@ -102,8 +102,8 @@ model TestCase {
   input  String
   output String
 
-  subtaskNumber Int
-  subtask       Subtask @relation(fields: [subtaskNumber, problemId], references: [subtaskNumber, problemId])
+  subtaskNumber Int?
+  subtask       Subtask? @relation(fields: [subtaskNumber, problemId], references: [subtaskNumber, problemId])
 
   @@id([caseNumber, problemId])
 }
