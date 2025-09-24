@@ -30,12 +30,3 @@ export const generalInfoSchema = object({
     path: ["isSpecialJudge"],
   }
 )
-
-export const statementSchema = object({
-  // statements
-  title: string().min(1, "제목이 입력되지 않았어요."),
-  legend: string().min(1, "문제 설명이 입력되지 않았어요."),
-  inputFormat: string().min(1, "입력 형식이 입력되지 않았어요."),
-  outputFormat: string().min(1, "출력 형식이 입력되지 않았어요."),
-  notes: string().optional(),
-})
