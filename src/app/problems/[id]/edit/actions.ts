@@ -10,7 +10,7 @@ export type GeneralInfoState = {
   success?: boolean
 }
 
-export async function editAction(
+export async function editGeneralInfoAction(
   prevState: GeneralInfoState,
   formData: FormData
 ): Promise<GeneralInfoState> {

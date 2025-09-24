@@ -30,7 +30,7 @@ import {
 import { LoadingImage } from "@/components/ui/loading-image"
 import { Plus, X } from "lucide-react"
 
-import { editAction } from "./actions"
+import { editGeneralInfoAction } from "./actions"
 import Image from "next/image"
 
 import { intToDiff, getColorOfDiff } from "@/utils/difficulty"
@@ -40,13 +40,13 @@ import { generalInfoSchema } from "./schemas"
 import z from "zod"
 
 interface EditFormProps {
-  allTags: string[]
+  everyTags: string[]
 }
 
-export default function EditForm({ allTags }: EditFormProps) {
+export default function EditForm({ everyTags: allTags }: EditFormProps) {
   const problem = useProblem()
 
-  const [state, formAction, isPending] = useActionState(editAction, {})
+  const [state, formAction, isPending] = useActionState(editGeneralInfoAction, {})
 
   const [form, setForm] = useState({
     ...problem,
