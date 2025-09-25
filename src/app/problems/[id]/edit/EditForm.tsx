@@ -131,7 +131,7 @@ export default function EditForm({ everyTags: allTags }: EditFormProps) {
                 type="number"
                 value={form.timeLimit}
                 onChange={(e) =>
-                  updateForm("timeLimit", parseInt(e.target.value))
+                  updateForm("timeLimit", parseInt(e.target.value) || 0)
                 }
               />
             </div>
@@ -143,7 +143,7 @@ export default function EditForm({ everyTags: allTags }: EditFormProps) {
                 type="number"
                 value={form.memoryLimit}
                 onChange={(e) =>
-                  updateForm("memoryLimit", parseInt(e.target.value))
+                  updateForm("memoryLimit", parseInt(e.target.value) || 0)
                 }
               ></Input>
             </div>
