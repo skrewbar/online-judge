@@ -33,7 +33,7 @@ export async function editGeneralInfoAction(
     }
   if (!(await prisma.problem.findUnique({ where: { id } })))
     return {
-      error: "페이지가 손상되었습니다. 새로고침 후 다시 시도해 주세요.",
+      error: "페이지가 손상되었어요. 새로고침 후 다시 시도해 주세요.",
     }
 
   const { tags: tagNames, ...dataWithoutTags } = structuredClone(parseRes.data)
