@@ -40,17 +40,15 @@ export async function editGeneralInfoAction(
 
   const tags = await prisma.tag.findMany({ where: { name: { in: tagNames } } })
 
-  if (parseRes.success) {
-    await prisma.problem.update({
-      where: { id },
-      data: {
-        ...dataWithoutTags,
-        tags: {
-          set: tags,
-        },
+  await prisma.problem.update({
+    where: { id },
+    data: {
+      ...dataWithoutTags,
+      tags: {
+        set: tags,
       },
-    })
-  }
+    },
+  })
 
   revalidatePath(`/problems/${id}/edit`)
 
