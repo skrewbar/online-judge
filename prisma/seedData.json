@@ -1,0 +1,25 @@
+{
+  "root": {
+    "handle": "root",
+    "email": "none@example.com",
+    "password": "root",
+    "isAdmin": true
+  },
+
+  "problems": [
+    {
+      "isPublic": true,
+      "difficulty": 18,
+      "tagNames": [
+        "다이나믹 프로그래밍",
+        "비트필드를 이용한 다이나믹 프로그래밍",
+        "비트마스킹"
+      ],
+
+      "title": "타일링",
+      "legend": "$N \\times M$ 크기의 격자를 $1 \\times 1$, $1 \\times 2$크기의 타일로 빈틈없이 채우는 경우의 수를 구하라.\n\n타일을 회전하는 것도 허용한다.",
+      "inputFormat": "첫째 줄에 두 정수 $N$, $M$이 주어진다. ($1 \\le N, M \\le 300$; $N \\times M \\le 300$)",
+      "outputFormat": "첫째 줄에 문제의 정답을 출력한다."
+    }
+  ]
+}
