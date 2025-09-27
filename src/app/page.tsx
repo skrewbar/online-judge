@@ -6,7 +6,9 @@ export default async function Home() {
 
   return (
     <main className="flex flex-col w-1/2 m-auto text-center">
-      <h1 className="text-3xl">안녕하세요, {user && user.handle}님!</h1>
+      <h1 className="text-3xl">
+        {user ? `안녕하세요, ${user.handle}님!` : "어서오세요!"}
+      </h1>
     </main>
   )
 }
