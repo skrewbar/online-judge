@@ -15,6 +15,8 @@ import {
 import { Fragment } from "react"
 import CopyButton from "@/components/CopyButton"
 
+import Editor from "./Editor"
+
 type PageProps = {
   params: Promise<{ id: string }>
 }
@@ -30,7 +32,7 @@ export default async function Page({ params }: PageProps) {
   const examples = problem.testCases.filter((tc) => tc.isSample)
 
   return (
-    <main className="w-full flex">
+    <main className="w-full flex h-full">
       <div className="flex-1 m-5 flex flex-col gap-5">
         <section>
           <p className="text-2xl flex">
@@ -130,9 +132,7 @@ export default async function Page({ params }: PageProps) {
           </section>
         )}
       </div>
-      <div className="flex-1">
-        <h1>ㅎㅇ</h1>
-      </div>
+      <Editor />
     </main>
   )
 }

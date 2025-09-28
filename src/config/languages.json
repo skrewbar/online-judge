@@ -1,0 +1,20 @@
+{
+  "cpp": {
+    "name": "C++23",
+    "compile": "g++ Main.cpp -o Main -O2 -Wall -lm -static -std=gnu++23 -DONLINE_JUDGE",
+    "execute": "./Main",
+    "version": "g++ (GCC) 15.1.0"
+  },
+  "python": {
+    "name": "Python3",
+    "compile": "python3 -W ignore -c \"import py_compile; py_compile.compile(r'Main.py')\"",
+    "execute": "python3 -W ignore Main.py",
+    "version": "Python 3.13"
+  },
+  "java": {
+    "name": "Java 21",
+    "compile": "javac -release 21 -J-Xms1024m -J-Xmx1920m -J-Xss512m -encoding UTF-8 Main.java",
+    "execute": "java -Xms1024m -Xmx1920m -Xss512m -Dfile.encoding=UTF-8 -XX:+UseSerialGC -DONLINE_JUDGE=1 Main",
+    "version": "openjdk 21.0.8 2025-07-15 LTS"
+  }
+}
