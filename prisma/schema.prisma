@@ -136,9 +136,9 @@ model Submission {
 }
 
 enum Language {
-  CPP20
-  PYTHON3
-  PYPY3
+  cpp
+  python
+  java
 }
 
 enum SubmissionStatus {
