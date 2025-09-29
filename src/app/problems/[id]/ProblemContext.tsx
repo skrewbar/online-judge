@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useContext } from "react"
-import type { Problem } from "./types"
+import type { Problem } from "@/types/db"
 
 export const ProblemContext = createContext<{ problem: Problem } | undefined>(
   undefined

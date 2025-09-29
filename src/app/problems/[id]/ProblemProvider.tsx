@@ -1,7 +1,7 @@
 "use client"
 
 import { ProblemContext } from "./ProblemContext"
-import type { Problem } from "./types"
+import type { Problem } from "@/types/db"
 
 interface ProblemProviderProps {
   problem: Problem
