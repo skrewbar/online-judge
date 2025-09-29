@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 
-import ProblemProvider from "./ProblemProvider"
+import { ProblemProvider } from "@/contexts/ProblemContext"
 
 type LayoutProps = Readonly<{
   children: React.ReactNode

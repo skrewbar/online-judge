@@ -1,7 +1,7 @@
 "use client"
 
 import { useActionState, useEffect, useState } from "react"
-import { useProblem } from "../../ProblemContext"
+import { useProblem } from "../../../../../contexts/ProblemContext"
 
 import { editStatementsAction } from "./actions"
 
