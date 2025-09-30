@@ -118,8 +118,9 @@ model Tag {
 model Submission {
   id Int @id @default(autoincrement())
 
-  code     String
-  language Language
+  code        String
+  language    Language
+  submittedAt DateTime @default(now())
 
   execTime    Int?
   memoryUsage Int?
