@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils"
+// TODO: replace with spinner (shadcn/ui)
 
 export function LoadingImage({ className }: { className?: string }) {
   return (
